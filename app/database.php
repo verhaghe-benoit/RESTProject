@@ -3,9 +3,9 @@
 $cfg=[
     'driver'    => 'mysql', // Db driver
     'host'      => 'localhost',
-    'database'  => 'enaylal',
-    'username'  => 'root',
-    'password'  => '',
+    'database'  => 'yolo',
+    'username'  => 'benoit',
+    'password'  => '123',
     'charset'   => 'utf8', // Optional
     'collation' => 'utf8_unicode_ci', // Optional
     'prefix'    => '',];

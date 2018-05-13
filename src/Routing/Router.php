@@ -38,6 +38,16 @@ class Router
         return $this->addRoute('POST', $path, $call);
     }
 
+    public function put($path, $call)
+    {
+        return $this->addRoute('PUT', $path, $call);
+    }
+
+    public function delete($path, $call)
+    {
+        return $this->addRoute('DELETE', $path, $call);
+    }
+
     public function run($url, $method)
     {
         $method = strtoupper($method);
@@ -63,7 +73,7 @@ class Router
     /**
      * @param string $method
      * @param string $path
-     * @param callable|string $call 'HomeController@index'
+     * @param callable|string $call 'FriendController@index'
      * @return Route
      */
     private function addRoute($method, $path, $call)

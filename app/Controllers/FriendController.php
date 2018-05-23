@@ -3,6 +3,7 @@
 
 namespace App\Controllers;
 use Enaylal\Controller;
+use \DB;
 
 /**
  * Class FriendController
@@ -11,7 +12,7 @@ use Enaylal\Controller;
 class FriendController extends Controller
 {
 
-    public function friend()
+    public function friends()
     {
         $friends = DB::table('Friends')->get();
         if(!empty($friends)){
@@ -27,6 +28,19 @@ class FriendController extends Controller
         echo json_encode($friends);
     }
 
+    public function user_friend($id){
+
+        $friends = DB::table('Friends')
+            ->join('user', 'user.id', '=', 'Friends.user_id1')
+            ->where('user.id', $id)
+            ->get();
+        if(!empty($friends)) {
+            echo json_encode($friends);
+        } else {
+            echo json_encode(['error'=> 'sorry that user has no friend']);
+        }
+    }
+
     public function delete($id1,$id2){
 
         $method = strtolower($_SERVER['REQUEST_METHOD']);
@@ -37,12 +51,26 @@ class FriendController extends Controller
                                 ->delete();
 
             $data = [
-                "success" => "User successfully deleted"
+                "success" => "The friend has been successfully deleted"
             ];
 
             echo json_encode($data);
         }
     }
-    
+
+    public function create(){
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
+        $data = [];
+        $data = json_decode(file_get_contents("php://input"), true);
+        DB::table('Friends')->insert($data);
+
+        $message = [
+            "success" => "Your friendship has been successfully created"
+        ];
+
+        echo json_encode($message);
+
+
+    }
 
 }

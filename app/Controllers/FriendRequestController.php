@@ -3,6 +3,7 @@
 
 namespace App\Controllers;
 use Enaylal\Controller;
+use \DB;
 
 /**
  * Class FriendRequestController
@@ -23,7 +24,7 @@ class FriendRequestController extends Controller
 
     public function single($id)
     {
-        $friends = DB::table('FriendsRequest')->where('user_IdRequester', $id);
+        $friends = DB::table('FriendsRequest')->where('user_IdRequester', $id)->get();
         echo json_encode($friends);
     }
 
@@ -42,6 +43,21 @@ class FriendRequestController extends Controller
 
             echo json_encode($data);
         }
+    }
+
+    public function create(){
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
+        $data = [];
+        $data = json_decode(file_get_contents("php://input"), true);
+        DB::table('FriendsRequest')->insert($data);
+
+        $message = [
+            "success" => "Your friend request has been successfully created"
+        ];
+
+        echo json_encode($message);
+
+
     }
     
 

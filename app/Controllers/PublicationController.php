@@ -3,6 +3,7 @@
 
 namespace App\Controllers;
 use Enaylal\Controller;
+use \DB;
 
 /**
  * Class PublicationController
@@ -23,8 +24,33 @@ class PublicationController extends Controller
 
     public function single($id)
     {
-        $friends = DB::table('Publication')->where('user_id', $id);
-        echo json_encode($friends);
+        $publication = DB::table('Publication')->where('user_id', $id)->get();
+        echo json_encode($publication);
+    }
+
+    public function user_publication($id){
+
+
+        /*
+
+       $publications = DB::table('Publication')
+            ->join('user', 'user.id', '=', 'Publication.user_id')
+            ->join('Comment', 'Comment.publication_id', '=', 'Publication.id')
+            ->where('user.id', $id);
+
+
+       */
+
+        $publications = DB::query('SELECT * FROM Publication 
+        INNER JOIN user ON user.id = Publication.publication_user_id
+        WHERE user.id = 15
+    ')->get();
+
+        if(!empty($publications)) {
+            echo json_encode($publications);
+        } else {
+            echo json_encode(['error'=> 'sorry that user has no publication']);
+        }
     }
 
     public function delete($id){
@@ -50,11 +76,25 @@ class PublicationController extends Controller
         DB::table('Publication')->insert($data);
 
         $message = [
-            "success" => "The user has been successfully created"
+            "success" => "The publication has been successfully created"
         ];
 
         echo json_encode($message);
 
+
+    }
+
+    public function edit($id)
+    {
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
+        $data = [];
+        $data = json_decode(file_get_contents("php://input"), true);
+        $test =  DB::table('Publication')->where('id', $id)->update($data);
+
+        $message = [
+            "success" => "Publication successfully edited"
+        ];
+        echo json_encode($message);
 
     }
 

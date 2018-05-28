@@ -81,10 +81,6 @@ class UserController extends Controller
         $birthday = $form->post('birthday');
         $token = $form->generateRandomString(60);
 
-        var_dump($token);
-        exit;
-
-
         $data = [
             'email' => $email,
             'password' => $password,
@@ -95,7 +91,6 @@ class UserController extends Controller
             'birthday' => $birthday,
             'token' => $token
         ];
-
 
         DB::table('user')->insert($data);
         $message = [
@@ -117,6 +112,8 @@ class UserController extends Controller
         if(!empty($found)){
 
            if($password == $found[0]->password){
+               $status = 200;
+               array_push($found, $status);
                return json_encode($found);
            }else{
                return json_encode([ "didntMatch" => "les mots de passe sont different"]);
@@ -124,10 +121,6 @@ class UserController extends Controller
         } else {
             return json_encode(["dontExist" => "L'utilisateur n'existe pas"]);
         }
-    }
-
-    public function postPassword(){
-
     }
 
 }

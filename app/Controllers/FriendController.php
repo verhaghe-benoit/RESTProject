@@ -30,10 +30,13 @@ class FriendController extends Controller
 
     public function user_friend($id){
 
-        $friends = DB::table('Friends')
-            ->join('user', 'user.id', '=', 'Friends.user_id1')
-            ->where('user.id', $id)
-            ->get();
+
+        $friends = DB::query('SELECT * FROM Friends
+        INNER JOIN user ON user.id = Friends.friend_user_id1
+        INNER JOIN user as u2 ON .id = Friends.friend_user_id2
+        WHERE user.id = 15
+    ')->get();
+
         if(!empty($friends)) {
             echo json_encode($friends);
         } else {
@@ -48,6 +51,10 @@ class FriendController extends Controller
         if($method == "delete"){
             DB::table('Friends')->where('user_id1', $id1)
                                 ->where('user_id2',$id2)
+                                ->delete();
+
+            DB::table('Friends')->where('user_id2', $id2)
+                                ->where('user_id1',$id1)
                                 ->delete();
 
             $data = [

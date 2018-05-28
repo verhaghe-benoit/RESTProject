@@ -24,7 +24,8 @@ class CommentController extends Controller
 
     public function getCommentPublication($id){
         // change ta requete sql, c'est plus les bon noms
-        $comments = DB::query('SELECT * FROM Comment 
+        $comments = DB::query('SELECT * FROM Comment
+        INNER JOIN user ON user.id = Comment.comment_user_id 
         INNER JOIN Publication ON Publication.publication_id = Comment.comment_publication_id
         WHERE Publication.publication_id = ? ',[$id])->get();
         if(!empty($comments)) {

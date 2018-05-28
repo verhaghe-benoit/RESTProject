@@ -30,17 +30,6 @@ class PublicationController extends Controller
 
     public function user_publication($id){
 
-
-        /*
-
-       $publications = DB::table('Publication')
-            ->join('user', 'user.id', '=', 'Publication.user_id')
-            ->join('Comment', 'Comment.publication_id', '=', 'Publication.id')
-            ->where('user.id', $id);
-
-
-       */
-
         $publications = DB::query('SELECT * FROM Publication 
         INNER JOIN user ON user.id = Publication.publication_user_id
         WHERE user.id = 15
@@ -70,18 +59,25 @@ class PublicationController extends Controller
     }
 
     public function create(){
-        $method = strtolower($_SERVER['REQUEST_METHOD']);
-        $data = [];
-        $data = json_decode(file_get_contents("php://input"), true);
-        DB::table('Publication')->insert($data);
 
+        $form = new Form();
+        $publication_content = $form->post('publication_content');
+        $publication_date = date('Y-m-d H:i:s');
+        $publication_user_id ;
+
+        $data = [
+            'publication_content' => $publication_content,
+            'publication_date' => $publication_date,
+            'publication_user_id' => $publication_user_id
+        ];
+
+
+        DB::table('Publication')->insert($data);
         $message = [
             "success" => "The publication has been successfully created"
         ];
 
         echo json_encode($message);
-
-
     }
 
     public function edit($id)

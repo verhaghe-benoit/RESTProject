@@ -2,8 +2,10 @@
 
 
 namespace App\Controllers;
+use DateTime;
 use Enaylal\Controller;
 use \DB;
+use Enaylal\Form;
 
 /**
  * Class PublicationController
@@ -58,16 +60,22 @@ class PublicationController extends Controller
         }
     }
 
+    /**
+     *
+     */
     public function create(){
 
+        $dt = new DateTime();
         $form = new Form();
+
         $publication_content = $form->post('publication_content');
-        $publication_date = date('Y-m-d H:i:s');
-        $publication_user_id ;
+
+        $publication_user_id = $form->post('publication_user_id') ;
+
 
         $data = [
             'publication_content' => $publication_content,
-            'publication_date' => $publication_date,
+            'publication_date' => $dt->format('Y-m-d H:i:s'),
             'publication_user_id' => $publication_user_id
         ];
 

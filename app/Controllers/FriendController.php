@@ -4,6 +4,7 @@
 namespace App\Controllers;
 use Enaylal\Controller;
 use \DB;
+use Enaylal\Form;
 
 /**
  * Class FriendController
@@ -31,11 +32,11 @@ class FriendController extends Controller
     public function user_friend($id){
 
 
-        $friends = DB::query('SELECT * FROM Friends
-        INNER JOIN user ON user.id = Friends.friend_user_id1
-        INNER JOIN user as u2 ON .id = Friends.friend_user_id2
-        WHERE user.id = 15
-    ')->get();
+        $friends = DB::query("SELECT * FROM Friends
+        INNER JOIN user as u1 ON u1.id = Friends.friend_user_id1
+        INNER JOIN user as u2 ON u2.id = Friends.friend_user_id2
+        WHERE u1.id = $id
+    ")->get();
 
         if(!empty($friends)) {
             echo json_encode($friends);
@@ -66,13 +67,19 @@ class FriendController extends Controller
     }
 
     public function create(){
-        $method = strtolower($_SERVER['REQUEST_METHOD']);
-        $data = [];
-        $data = json_decode(file_get_contents("php://input"), true);
-        DB::table('Friends')->insert($data);
+        $form = new Form();
+        $date = $form->post('friend_date');
+        $user1 = $form->post('friend_user_id1');
+        $user2 = $form->post('friend_user_id2');
+        $data = [
+            'friend_date' => $date,
+            'friend_user_id1' => $user1,
+            'friend_user_id2' => $user2
+        ];
 
+        DB::table('Friends')->insert($data);
         $message = [
-            "success" => "Your friendship has been successfully created"
+            "success" => "The user has been successfully created"
         ];
 
         echo json_encode($message);

@@ -4,6 +4,7 @@
 namespace App\Controllers;
 use Enaylal\Controller;
 use \DB;
+use DateTime;
 use Enaylal\Form;
 
 /**
@@ -68,21 +69,22 @@ class FriendController extends Controller
 
     public function create(){
         $form = new Form();
-        $date = $form->post('friend_date');
+        $dt = new DateTime();
+
         $user1 = $form->post('friend_user_id1');
         $user2 = $form->post('friend_user_id2');
         $data = [
-            'friend_date' => $date,
+            'friend_date' => $dt->format('Y-m-d H:i:s'),
             'friend_user_id1' => $user1,
             'friend_user_id2' => $user2
         ];
 
         DB::table('Friends')->insert($data);
-        $message = [
-            "success" => "The user has been successfully created"
-        ];
 
-        echo json_encode($message);
+
+        echo json_encode([
+            "success" => "The user has been successfully created"
+        ]);
 
 
     }

@@ -4,6 +4,9 @@
 namespace App\Controllers;
 use Enaylal\Controller;
 use \DB;
+use DateTime;
+use Enaylal\Form;
+use Pixie\Exception;
 
 /**
  * Class FriendRequestController
@@ -46,19 +49,44 @@ class FriendRequestController extends Controller
     }
 
     public function create(){
-        $method = strtolower($_SERVER['REQUEST_METHOD']);
-        $data = [];
-        $data = json_decode(file_get_contents("php://input"), true);
-        DB::table('FriendsRequest')->insert($data);
+        $form = new Form();
+        $dt = new DateTime();
 
-        $message = [
-            "success" => "Your friend request has been successfully created"
+
+        $user1 = $form->post('user_IdRequester');
+        $user2 = $form->post('user_IdRequestee');
+        $data = [
+            'request_date' => $dt->format('Y-m-d H:i:s'),
+            'user_IdRequester' => $user1,
+            'user_IdRequestee' => $user2
         ];
+       $found = DB::query('SELECT * FROM FriendsRequest
+                            WHERE (user_IdRequestee = ? AND user_IdRequester = ?) OR (user_IdRequestee = ? AND user_IdRequester = ?)',array($user1,$user2,$user2,$user1));
+       if(empty($found->get())){
+              DB::table('FriendsRequest')->insert($data);
 
-        echo json_encode($message);
+
+
+       } else {
+           echo "ça marche pas gamin";
+
+       }
 
 
     }
-    
 
+    public function requested($id)
+    {
+        $POTOS = DB::query("SELECT * FROM FriendsRequest
+        INNER JOIN user ON user.id = FriendsRequest.user_IdRequester
+        WHERE FriendsRequest.user_IdRequestee = $id
+        ")->get();
+
+        if(!empty($POTOS)) {
+            echo json_encode($POTOS);
+        } else {
+            echo json_encode(['error'=> 'TA PAS DAMI AHAH']);
+        }
+
+    }
 }

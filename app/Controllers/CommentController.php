@@ -2,8 +2,10 @@
 
 
 namespace App\Controllers;
+use DateTime;
 use Enaylal\Controller;
 use \DB;
+use Enaylal\Form;
 
 /**
  * Class CommentController
@@ -57,18 +59,29 @@ class CommentController extends Controller
     }
 
     public function create(){
-        $method = strtolower($_SERVER['REQUEST_METHOD']);
-        $data = [];
-        $data = json_decode(file_get_contents("php://input"), true);
-        DB::table('Comment')->insert($data);
 
+        $dt = new DateTime();
+        $form = new Form();
+
+        $comment_content = $form->post('comment_content');
+        $comment_user_id = $form->post('comment_user_id') ;
+        $comment_publication_id = $form->post('comment_publication_id') ;
+
+
+        $data = [
+            'comment_content' => $comment_content,
+            'comment_date' => $dt->format('Y-m-d H:i:s'),
+            'comment_user_id' => $comment_user_id,
+            'comment_publication_id' => $comment_publication_id
+        ];
+
+
+        DB::table('Comment')->insert($data);
         $message = [
             "success" => "The comment has been successfully created"
         ];
 
         echo json_encode($message);
-
-
     }
 
 
@@ -85,5 +98,7 @@ class CommentController extends Controller
         echo json_encode($message);
 
     }
+
+
 
 }

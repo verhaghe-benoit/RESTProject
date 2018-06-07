@@ -16,6 +16,7 @@ $router->group('/users', function(Router $router) {
     $router->get('/{id}','UserController@single');
     $router->get('/{id}/friends', 'FriendController@user_friend');
     $router->get('/{id}/publications', 'PublicationController@user_publication');
+    $router->get('/{id}/request', 'FriendRequestController@requested');
     $router->put('/{id}/edit','UserController@edit');
     $router->delete('/{id}/delete','UserController@delete');
     $router->post('/create','UserController@create');

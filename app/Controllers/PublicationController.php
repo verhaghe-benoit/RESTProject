@@ -32,10 +32,10 @@ class PublicationController extends Controller
 
     public function user_publication($id){
 
-        $publications = DB::query('SELECT * FROM Publication 
+        $publications = DB::query("SELECT * FROM Publication 
         INNER JOIN user ON user.id = Publication.publication_user_id
-        WHERE user.id = 15
-    ')->get();
+        WHERE user.id = $id
+    ")->get();
 
         if(!empty($publications)) {
             echo json_encode($publications);

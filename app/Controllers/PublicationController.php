@@ -26,7 +26,7 @@ class PublicationController extends Controller
 
     public function single($id)
     {
-        $publication = DB::table('Publication')->where('user_id', $id)->get();
+        $publication = DB::table('Publication')->where('publication_user_id', $id)->get();
         echo json_encode($publication);
     }
 
@@ -49,8 +49,8 @@ class PublicationController extends Controller
         $method = strtolower($_SERVER['REQUEST_METHOD']);
 
         if($method == "delete"){
-            DB::table('Publication')->where('id', $id)->delete();
-            DB::table('Comment')->where('publication_id',$id)->delete();
+            DB::table('Publication')->where('publication_id', $id)->delete();
+            DB::table('Comment')->where('comment_publication_id',$id)->delete();
 
             $data = [
                 "success" => "Publication and Comments of the publication successfully deleted"

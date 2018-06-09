@@ -68,7 +68,7 @@ class FriendRequestController extends Controller
 
 
        } else {
-           echo "ça marche pas gamin";
+           echo "ça marche pas";
 
        }
 

@@ -26,7 +26,7 @@ class FriendController extends Controller
 
     public function single($id)
     {
-        $friends = DB::table('Friends')->where('user_id1', $id);
+        $friends = DB::table('Friends')->where('friends_user_id1', $id);
         echo json_encode($friends);
     }
 
@@ -51,12 +51,12 @@ class FriendController extends Controller
         $method = strtolower($_SERVER['REQUEST_METHOD']);
 
         if($method == "delete"){
-            DB::table('Friends')->where('user_id1', $id1)
-                                ->where('user_id2',$id2)
+            DB::table('Friends')->where('friend_user_id1', $id1)
+                                ->where('friend_user_id2',$id2)
                                 ->delete();
 
-            DB::table('Friends')->where('user_id2', $id2)
-                                ->where('user_id1',$id1)
+            DB::table('Friends')->where('friend_user_id2', $id2)
+                                ->where('friend_user_id1',$id1)
                                 ->delete();
 
             $data = [

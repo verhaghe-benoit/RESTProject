@@ -30,10 +30,6 @@ class UserController extends Controller
     public function single($id){
 
         $user = DB::query("SELECT * FROM user 
-        LEFT JOIN Publication ON user.id = Publication.publication_user_id
-        LEFT JOIN Comment ON user.id = Comment.comment_user_id
-        LEFT JOIN Friends ON user.id = Friends.friend_user_id1
-        LEFT JOIN FriendsRequest ON user.id = FriendsRequest.user_IdRequestee
         WHERE user.id = $id")->get();
 
         echo json_encode($user);
